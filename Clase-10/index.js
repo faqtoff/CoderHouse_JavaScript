@@ -107,14 +107,23 @@ class ProductList {
 /*====================================================================== ESTADO INICIAL */
 const productList   = new ProductList
 const seleccion     = new ProductList
-
-productList.importProductList([
+const initalProducts = [
     {titulo:'Coca Cola', precio: 200, stock: 4, id: 1}, 
     {titulo:'Lays', precio: 100, stock: 3, id: 2},
     {titulo:'Chocolate', precio: 50, stock: 20, id: 3}
-])
+]
+productList.importProductList(localStorage.getItem('products') || initalProducts)
 
 /*====================================================================== FUNCIONES */
+/* Actualizar Storage */
+const updateData = (data) => {
+    localStorage.setItem('products', data);
+}
+/* Get Storage */
+const updateData = () => {
+    const data = localStorage.getItem('products');
+    return data
+}
 /* Mostrar Lista */
 const productos = document.querySelector(`#productos`)
 productList.showProducts(productos, 'li', {verMas: true, editar: true})
