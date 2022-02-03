@@ -1,4 +1,3 @@
-/*====================================================================== CLASES */
 class Producto {
     constructor(titulo, precio, stock, id, customSettings, cupones){
         this.id = `${id}`;
@@ -7,7 +6,14 @@ class Producto {
         this.stock = stock;
         this.active = false;
         this.customSettings = customSettings || {};
-        this.cupones = cupones
+        this.cupones = cupones || []
+    }
+    newProductFromObject (object) {
+        this.id = object.id;
+        this.titulo = object.titulo;
+        this.precio = object.precio;
+        this.stock = object.stock;
+        this.customSettings = object.customSettings || {};
     }
     showPrice () {
         alert(`Valor: $${this.precio}`)
@@ -18,15 +24,19 @@ class Producto {
     getFullInfo() {
         alert(`Titulo: ${ this.titulo} Valor: $${this.precio} Stock: ${this.stock}`)
     }
-    nuevaCompra() {
-        if (this.stock > 0) {
-            this.stock -= 1
+    nuevaCompra(cant) {
+        if (this.stock >= cant) {
+            this.stock -= cant
         }
         else {
             alert(`El producto ${this.titulo} no tiene Stock`)
         }
     }
+    agregarAlStock(cant) {
+        this.stock += cant
+    }
 }
+
 class ProductList {
     constructor(lista) {
         this.lista = lista || []
@@ -48,23 +58,37 @@ class ProductList {
     showProducts (padre, containerTag, options) {
         for (const producto of this.lista) {
             let contenedor = document.createElement(containerTag);
-            contenedor.innerHTML = `
+            contenedor.classList.add('col--span--12')
+            contenedor.classList.add('grid--sm--1')
+            contenedor.classList.add('grid--med--2')
+            contenedor.classList.add('grid--xl--2')
+            let contenido = document.createElement('div');
+            contenido.innerHTML = `
                 <h3>${producto.titulo}</h3> 
                 <p>ID: ${producto.id}</p>
+                <p>Disponible: ${producto.stock}</p>
                 <span>$${producto.precio}</span>
             `
+            let buttons = document.createElement('div');
+            buttons.classList.add('grid--4')
             if (options.verMas) {
-                contenedor.innerHTML += `<button class='verMas__btn' id='${producto.id}'>Ver Mas</button>`
+                buttons.innerHTML += `
+                <button class='verMas__btn boton--e bg--primary e--3--terciary' id='vermas__${producto.id}' onClick="console()">
+                    <span>Ver Mas</span>
+                </button>
+                `
             }
             if (options.agregar) {
-                contenedor.innerHTML += `<button class='agregar__btn' id='${producto.id}'>Agregar</button>`
+                buttons.innerHTML += `<button class='agregar__btn boton--e bg--primary e--3--secondary' id='agregar__${producto.id}'><span>Agregar al carro</span></button>`
             }
             if (options.editar) {
-                contenedor.innerHTML += `<button class='editar__btn' id='${producto.id}'>Editar</button>`
+                buttons.innerHTML += `<button class='editar__btn boton--e bg--primary e--3--success' id='editar__${producto.id}'><span>Editar</span></button>`
             }
             if (options.eliminar) {
-                contenedor.innerHTML += `<button class='eliminar__btn' id='${producto.id}'>Eliminar</button>`
+                buttons.innerHTML += `<button class='eliminar__btn boton--e bg--primary e--3--red' id='eliminar__${producto.id}'><span>Eliminar</span></button>`
             }
+            contenedor.appendChild(contenido)
+            contenedor.appendChild(buttons)
             padre.appendChild(contenedor)
         }
     }
@@ -103,71 +127,18 @@ class ProductList {
         let total = aPagar + iva
         return {aPagar, iva, total}
     }
+    isInLista(id) {
+        return this.lista.find( element => element.id === id) ? true : false
+    }
+    nuevaCompra(id, cant, add) {
+        const producto = this.lista.find( element => element.id === id)
+        if (add){
+            console.log('add')
+            producto.agregarAlStock(cant)
+        }
+        else{
+            producto.nuevaCompra(cant)
+        }
+        this.lista[this.lista.indexOf(producto)] = producto
+    }
 }
-/*====================================================================== ESTADO INICIAL */
-const productList   = new ProductList
-const seleccion     = new ProductList
-const initalProducts = [
-    {titulo:'Coca Cola', precio: 200, stock: 4, id: 1}, 
-    {titulo:'Lays', precio: 100, stock: 3, id: 2},
-    {titulo:'Chocolate', precio: 50, stock: 20, id: 3}
-]
-productList.importProductList(localStorage.getItem('products') || initalProducts)
-
-/*====================================================================== FUNCIONES */
-/* Actualizar Storage */
-const updateData = (data) => {
-    localStorage.setItem('products', data);
-}
-/* Get Storage */
-const updateData = () => {
-    const data = localStorage.getItem('products');
-    return data
-}
-/* Mostrar Lista */
-const productos = document.querySelector(`#productos`)
-productList.showProducts(productos, 'li', {verMas: true, editar: true})
-/* Agregar al carro */
-const newToCart = document.querySelector('#newToCart')
-newToCart.addEventListener('click', () => {
-    console.log("click")
-    const operacion = prompt(`Elija un producto`)
-
-    if (productList.getById(operacion)){
-        seleccion.newProductFromObject(productList.getById(operacion))
-    } 
-
-    /* SUBTOTAL */
-    const subtotal = document.querySelector('#subtotal')
-    subtotal.innerHTML = `SubTotal: $${seleccion.totalAmount().aPagar}`
-
-    /* IVA */
-    const iva = document.querySelector('#iva')
-    iva.innerHTML = `IVA (21%): $${seleccion.totalAmount().iva}`
-
-    /* TOTAL */
-    const total = document.querySelector('#total')
-    total.innerHTML = `TOTAL: $${seleccion.totalAmount().total}`
-
-    const carrito = document.querySelector(`#cart`)
-    seleccion.showProducts(carrito, 'li', {eliminar: true})
-
-    /*  Eliminar */
-    const eliminarBtns = document.querySelectorAll('.eliminar__btn')
-    eliminarBtns.forEach(button => {
-        button.addEventListener('click', e => {
-            let id = e.target.id
-            alert(`Eliminar ${id}`)
-        })
-    })
-})
-
-/* Ver Mas */
-const verMasBtns = document.querySelectorAll('.verMas__btn')
-verMasBtns.forEach(button => {
-    button.addEventListener('click', e => {
-        let id = e.target.id
-        alert(`Ver Mas ${id}`)
-    })
-})
-
