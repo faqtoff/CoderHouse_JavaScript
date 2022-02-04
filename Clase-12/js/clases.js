@@ -55,42 +55,43 @@ class ProductList {
             this.lista.push(new Producto(object.titulo, object.precio, object.stock, object.id, object.customSettings))
         })
     }
-    showProducts (padre, containerTag, options) {
+    showProducts (padre, options) {
         for (const producto of this.lista) {
-            let contenedor = document.createElement(containerTag);
-            contenedor.classList.add('col--span--12')
-            contenedor.classList.add('grid--sm--1')
-            contenedor.classList.add('grid--med--2')
-            contenedor.classList.add('grid--xl--2')
-            let contenido = document.createElement('div');
-            contenido.innerHTML = `
-                <h3>${producto.titulo}</h3> 
-                <p>ID: ${producto.id}</p>
-                <p>Disponible: ${producto.stock}</p>
-                <span>$${producto.precio}</span>
-            `
-            let buttons = document.createElement('div');
-            buttons.classList.add('grid--4')
+            let buttons = '';
             if (options.verMas) {
-                buttons.innerHTML += `
+                buttons += `
                 <button class='verMas__btn boton--e bg--primary e--3--terciary' id='vermas__${producto.id}' onClick="console()">
                     <span>Ver Mas</span>
                 </button>
                 `
             }
             if (options.agregar) {
-                buttons.innerHTML += `<button class='agregar__btn boton--e bg--primary e--3--secondary' id='agregar__${producto.id}'><span>Agregar al carro</span></button>`
+                buttons += `<button class='agregar__btn boton--e bg--primary e--3--secondary' id='agregar__${producto.id}'><span>Agregar al carro</span></button>`
             }
             if (options.editar) {
-                buttons.innerHTML += `<button class='editar__btn boton--e bg--primary e--3--success' id='editar__${producto.id}'><span>Editar</span></button>`
+                buttons += `<button class='editar__btn boton--e bg--primary e--3--success' id='editar__${producto.id}'><span>Editar</span></button>`
             }
             if (options.eliminar) {
-                buttons.innerHTML += `<button class='eliminar__btn boton--e bg--primary e--3--red' id='eliminar__${producto.id}'><span>Eliminar</span></button>`
+                buttons += `<button class='eliminar__btn boton--e bg--primary e--3--red' id='eliminar__${producto.id}'><span>Eliminar</span></button>`
             }
-            contenedor.appendChild(contenido)
-            contenedor.appendChild(buttons)
-            padre.appendChild(contenedor)
+            
+            
+            $(padre).append(
+                `<div class='col--span--12 grid--sm--1 grid--med--2 grid--xl--2'>
+                    <div>
+                        <h3>${producto.titulo}</h3> 
+                        <p>ID: ${producto.id}</p>
+                        <p>Disponible: ${producto.stock}</p>
+                        <span>$${producto.precio}</span>
+                    </div>
+                    <div class='grid--4'>
+                        ${buttons}
+                    </div>
+                </div>`
+            )
         }
+
+
     }
     getByName (name) {
         return this.lista.filter( element => element.titulo = name)
