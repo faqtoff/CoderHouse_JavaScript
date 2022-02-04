@@ -1,16 +1,13 @@
-/*====================================================================== ESTADO INICIAL */
-const form = document.querySelector('#newProduct')
-
-form.addEventListener('submit', e => {
+$('#submitNewProduct').click( e => {
     e.preventDefault();
-
-    const id = parseInt( e.target.id.value )|| null
-    const titulo = e.target.titulo.value  || null
-    const precio = parseFloat(e.target.precio.value)  || null
-    const stock = parseInt( e.target.stock.value)  || null
     
+    const id = parseInt( $('#id').val() )|| null
+    const titulo = $('#titulo').val() || null
+    const precio = parseFloat($('#precio').val())  || null
+    const stock = parseInt( $('#stock').val())  || null
+
     if(id && titulo && precio && stock) {
-        if ( !productList.isInLista(e.target.id.value) ){
+        if ( !productList.isInLista(id) ){
             productList.newProductFromObject({id, titulo, precio, stock})
             localStorage.setItem('products', JSON.stringify(productList.lista))
         }
@@ -18,5 +15,4 @@ form.addEventListener('submit', e => {
             alert('Ya existe un producto con esta id')
         }
     }
-
 })
