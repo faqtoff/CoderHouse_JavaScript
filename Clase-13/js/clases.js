@@ -76,8 +76,8 @@ class ProductList {
             }
             
             
-            $(padre).append(
-                `<div class='col--span--12 grid--sm--1 grid--med--2 grid--xl--2'>
+            $(padre).prepend(
+                `<div style="display: none;" class='col--span--12 grid--sm--1 grid--med--2 grid--xl--2 product'>
                     <div>
                         <h3>${producto.titulo}</h3> 
                         <p>ID: ${producto.id}</p>
@@ -89,6 +89,8 @@ class ProductList {
                     </div>
                 </div>`
             )
+
+            $('.product').fadeIn()
         }
 
 
