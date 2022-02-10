@@ -90,7 +90,7 @@ class ProductList {
                 </div>`
             )
 
-            $('.product').fadeIn()
+            $('.product').fadeIn(2500)
         }
 
 
