@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Clase 10</title>
+</head>
+<body>
+    
+    <header>
+        <nav class="navbar--faqstyle bg--primary">
+            <div class="navbar__brand">
+                <h1 class="navbar__link mt--1">Calculadora de precios</h1>
+            </div>
+        </nav>
+    </header>
+
+    <main class="grid m--2 bg--background">
+
+        <div class="col--span--12 grid--med--6">
+            
+            <a href="/carrito.html" class="boton--e bg--primary e--2--terciary" id='newToCart'>
+                <span>
+                   Ver carro
+                </span>
+            </a>
+            <a href="/producto.html" class="boton--e bg--primary e--2--terciary" id='newToCart'>
+                <span>
+                   Agregar Producto
+                </span>
+            </a>
+
+        </div>
+
+        <div class="card mb--2 col--span--12 scroll--auto" id="productos">
+        </div>
+
+    </main>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./js/clases.js"></script>
+    <script src="./js/inicial_state.js"></script>
+    <script src='./js/index.js'></script>
+</body>
+</html>
