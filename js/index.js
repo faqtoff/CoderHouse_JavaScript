@@ -41,14 +41,15 @@ $('.agregar__btn').click(function(){
         }
     }
 
-    const form = querySelector('#addToCart')
-    form.addEventListener('submit', e => {
-        e.preventDefault()
-    })
     
     /* const cantidad = prompt(`Selecciono el producto ${id}. Elija Cantidad`)
 
     */
+})
+
+const form = querySelector('#submitNewProduct')
+form.addEventListener('click', e => {
+    e.preventDefault()
 })
 
 const addToCart = (cantidad) => {
